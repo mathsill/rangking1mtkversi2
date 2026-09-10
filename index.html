@@ -1,0 +1,701 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rangking 1 Matematika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --biru-muda: #cfe9fb;
+    --biru-muda-2: #e8f5fd;
+    --biru-tua: #1c3d5a;
+    --maroon: #7a1f2b;
+    --maroon-dark: #5c1620;
+    --maroon-soft: #f4dde0;
+    --hijau: #2f7d5a;
+    --hijau-soft: #dcf1e6;
+    --putih: #ffffff;
+    --teks: #22323f;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(28,61,90,0.18);
+  }
+  *{ box-sizing: border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family:'Manrope', sans-serif;
+    background: linear-gradient(180deg, var(--biru-tua) 0%, #0f2438 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:20px;
+    color:var(--teks);
+  }
+  .stage{
+    width: 420px;
+    aspect-ratio: 3 / 4;
+    max-height: 94vh;
+    background: linear-gradient(165deg, var(--biru-muda-2) 0%, var(--biru-muda) 100%);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    display:flex;
+    flex-direction:column;
+    border: 6px solid var(--putih);
+  }
+  .band{
+    height: 10px;
+    width:100%;
+    background: linear-gradient(90deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+    flex-shrink:0;
+  }
+  .screen{
+    flex:1;
+    display:none;
+    flex-direction:column;
+    padding: 26px 24px 22px;
+    overflow-y:auto;
+  }
+  .screen.active{ display:flex; }
+
+  /* ---------- START SCREEN ---------- */
+  #screen-start{ justify-content:center; align-items:center; text-align:center; gap:18px; }
+  .eyebrow-badge{
+    background: var(--maroon);
+    color:#fff;
+    font-weight:700;
+    font-size: 12px;
+    letter-spacing:0.04em;
+    padding:6px 16px;
+    border-radius:999px;
+  }
+  .title-hero{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size: 40px;
+    line-height:1.05;
+    color: var(--biru-tua);
+    margin:0;
+  }
+  .title-hero span{ color: var(--maroon); }
+  .subtitle{ font-size:14.5px; color:#3c5064; max-width:300px; line-height:1.5; margin:0; }
+  .info-grid{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:10px;
+    width:100%;
+    margin-top:6px;
+  }
+  .info-chip{
+    background:#fff;
+    border-radius:14px;
+    padding:12px 6px;
+    box-shadow: 0 4px 12px rgba(28,61,90,0.10);
+  }
+  .info-chip b{ display:block; font-size:19px; color:var(--maroon); font-family:'Fraunces',serif; }
+  .info-chip span{ font-size:10.5px; color:#5b6c7a; }
+  .btn{
+    border:none;
+    cursor:pointer;
+    font-family:'Manrope', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    border-radius:14px;
+    padding:15px 30px;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{ transform: scale(0.97); }
+  .btn-primary{
+    background: var(--maroon);
+    color:#fff;
+    box-shadow: 0 8px 18px rgba(122,31,43,0.35);
+  }
+  .btn-primary:hover{ background: var(--maroon-dark); }
+  .btn-outline{
+    background:transparent;
+    color: var(--biru-tua);
+    border: 2px solid var(--biru-tua);
+  }
+
+  /* ---------- QUESTION SCREEN ---------- */
+  .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .qnum{ font-size:13px; font-weight:700; color:var(--biru-tua); }
+  .qtopic{
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--maroon);
+    background: var(--maroon-soft);
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .timer-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .timer-bar-bg{
+    flex:1;
+    height:10px;
+    background: rgba(28,61,90,0.15);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .timer-bar-fill{
+    height:100%;
+    width:100%;
+    background: var(--hijau);
+    border-radius:999px;
+    transition: width 1s linear, background .3s ease;
+  }
+  .timer-num{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:20px;
+    color: var(--biru-tua);
+    min-width:34px;
+    text-align:center;
+  }
+  .points-tag{
+    align-self:flex-start;
+    font-size:11px;
+    font-weight:700;
+    color:#fff;
+    background: var(--biru-tua);
+    padding:4px 11px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .question-card{
+    background:#fff;
+    border-radius: var(--radius);
+    padding:20px;
+    box-shadow: 0 6px 16px rgba(28,61,90,0.12);
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .question-text{
+    font-family:'Fraunces', serif;
+    font-size: 19px;
+    line-height:1.4;
+    color: var(--teks);
+    margin:0 0 18px 0;
+  }
+  .answer-input{
+    margin-top:auto;
+    width:100%;
+    padding:14px;
+    font-size:16px;
+    font-family:'Manrope', sans-serif;
+    border-radius:12px;
+    border:2px solid var(--biru-muda);
+    outline:none;
+    background: var(--biru-muda-2);
+    color: var(--teks);
+  }
+  .answer-input:focus{ border-color: var(--maroon); }
+  .submit-row{ margin-top:14px; display:flex; }
+  .submit-row .btn{ flex:1; }
+
+  /* ---------- EXPLANATION SCREEN ---------- */
+  .result-flag{
+    align-self:flex-start;
+    font-weight:800;
+    font-size:13px;
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  .flag-benar{ background: var(--hijau-soft); color: var(--hijau); }
+  .flag-salah{ background: var(--maroon-soft); color: var(--maroon); }
+  .explain-card{
+    background:#fff;
+    border-radius: var(--radius);
+    padding:20px;
+    box-shadow: 0 6px 16px rgba(28,61,90,0.12);
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    overflow-y:auto;
+  }
+  .explain-row label{
+    display:block;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.03em;
+    color:#7c8b98;
+    margin-bottom:4px;
+  }
+  .explain-row .val{ font-size:15px; color:var(--teks); line-height:1.4; }
+  .explain-row .val.key{ color: var(--hijau); font-weight:700; }
+  .explain-row .val.user-wrong{ color: var(--maroon); font-weight:700; text-decoration: line-through; }
+  .divider{ height:1px; background:#eef1f4; margin:2px 0; }
+  .explain-text{ font-size:14px; line-height:1.55; color:#42535f; }
+
+  /* ---------- RECAP SCREEN ---------- */
+  #screen-recap{ padding-top: 22px; }
+  .recap-score{
+    text-align:center;
+    margin-bottom:14px;
+  }
+  .recap-score .num{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size: 52px;
+    color: var(--maroon);
+    line-height:1;
+  }
+  .recap-score .den{ font-size:14px; color:#5b6c7a; }
+  .recap-stats{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .recap-stat{
+    flex:1;
+    background:#fff;
+    border-radius:14px;
+    text-align:center;
+    padding:10px 4px;
+    box-shadow: 0 4px 12px rgba(28,61,90,0.10);
+  }
+  .recap-stat b{ display:block; font-size:20px; font-family:'Fraunces',serif; }
+  .recap-stat.ok b{ color: var(--hijau); }
+  .recap-stat.no b{ color: var(--maroon); }
+  .recap-stat span{ font-size:10px; color:#5b6c7a; }
+  .recap-list{
+    flex:1;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding-right:2px;
+  }
+  .recap-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#fff;
+    border-radius:12px;
+    padding:9px 12px;
+    box-shadow: 0 2px 8px rgba(28,61,90,0.08);
+  }
+  .recap-icon{
+    width:24px; height:24px;
+    border-radius:50%;
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:800; font-size:13px;
+  }
+  .recap-icon.ok{ background: var(--hijau); }
+  .recap-icon.no{ background: var(--maroon); }
+  .recap-item .rtext{ font-size:12.5px; color:var(--teks); flex:1; }
+  .recap-item .rpts{ font-size:11.5px; font-weight:700; color:#5b6c7a; }
+  .recap-btnrow{ margin-top:14px; }
+  .recap-btnrow .btn{ width:100%; }
+
+  ::-webkit-scrollbar{ width:6px; }
+  ::-webkit-scrollbar-thumb{ background: rgba(28,61,90,0.25); border-radius:10px; }
+  sup{ font-size: 0.7em; top: -0.6em; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="band"></div>
+
+  <!-- START -->
+  <div id="screen-start" class="screen active">
+    <span class="eyebrow-badge">SIMULASI LOMBA</span>
+    <h1 class="title-hero">RANGKING 1<br><span>MATEMATIKA</span></h1>
+    <p class="subtitle">Uji kecepatan dan ketepatanmu menjawab soal matematika SMA: eksponen, statistika dasar, bangun ruang, dalil Pythagoras, dan peluang.</p>
+    <div class="info-grid">
+      <div class="info-chip"><b>20</b><span>SOAL</span></div>
+      <div class="info-chip"><b>20"</b><span>PER SOAL</span></div>
+      <div class="info-chip"><b>100</b><span>TOTAL POIN</span></div>
+    </div>
+    <input type="text" class="answer-input" id="player-name" placeholder="Tuliskan namamu di sini..." autocomplete="off" style="margin-top:6px;">
+    <button class="btn btn-primary" id="btn-start" style="margin-top:14px;">Mulai Lomba</button>
+    <button class="btn btn-outline" id="btn-teacher-view" style="margin-top:10px; font-size:13px; padding:10px 20px;">Lihat Hasil Semua Peserta (Guru)</button>
+  </div>
+
+  <!-- TEACHER RESULTS -->
+  <div id="screen-teacher" class="screen">
+    <div class="top-row">
+      <span class="qnum">Rekap Semua Peserta</span>
+      <button class="btn btn-outline" id="btn-teacher-back" style="padding:6px 14px; font-size:11px;">Kembali</button>
+    </div>
+    <div id="teacher-status" style="font-size:12px; color:#5b6c7a; margin-bottom:10px;">Memuat data...</div>
+    <div class="recap-list" id="teacher-list"></div>
+    <button class="btn btn-primary" id="btn-teacher-refresh" style="margin-top:12px;">Muat Ulang</button>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="screen-question" class="screen">
+    <div class="top-row">
+      <span class="qnum" id="qnum-label">Soal 1 dari 20</span>
+      <span class="qtopic" id="qtopic-label">Eksponen</span>
+    </div>
+    <div id="player-name-tag" style="font-size:11.5px; font-weight:700; color:#5b6c7a; margin-bottom:10px;"></div>
+    <div class="timer-wrap">
+      <div class="timer-bar-bg"><div class="timer-bar-fill" id="timer-fill"></div></div>
+      <div class="timer-num" id="timer-num">20</div>
+    </div>
+    <span class="points-tag" id="points-tag">3 POIN</span>
+    <div class="question-card">
+      <p class="question-text" id="question-text">Soal akan muncul di sini.</p>
+      <input type="text" class="answer-input" id="answer-input" placeholder="Ketik jawabanmu di sini..." autocomplete="off">
+      <div class="submit-row">
+        <button class="btn btn-primary" id="btn-submit">Kirim Jawaban</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLANATION -->
+  <div id="screen-explain" class="screen">
+    <span class="result-flag" id="result-flag">BENAR</span>
+    <div class="explain-card">
+      <div class="explain-row">
+        <label>SOAL</label>
+        <div class="val" id="ex-question"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="explain-row">
+        <label>JAWABANMU</label>
+        <div class="val" id="ex-user"></div>
+      </div>
+      <div class="explain-row">
+        <label>KUNCI JAWABAN</label>
+        <div class="val key" id="ex-key"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="explain-row">
+        <label>PEMBAHASAN</label>
+        <div class="explain-text" id="ex-explain"></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="btn-next" style="margin-top:14px;">Lanjut ke Soal Berikutnya</button>
+  </div>
+
+  <!-- RECAP -->
+  <div id="screen-recap" class="screen">
+    <div style="text-align:center; font-size:12.5px; font-weight:700; color:var(--biru-tua); margin-bottom:2px;" id="recap-name"></div>
+    <div style="text-align:center; font-size:10.5px; color:#5b6c7a; margin-bottom:8px;" id="recap-sync-status"></div>
+    <div class="recap-score">
+      <div class="num" id="recap-score">0</div>
+      <div class="den">dari 100 poin</div>
+    </div>
+    <div class="recap-stats">
+      <div class="recap-stat ok"><b id="recap-benar">0</b><span>JAWABAN BENAR</span></div>
+      <div class="recap-stat no"><b id="recap-salah">0</b><span>JAWABAN SALAH</span></div>
+    </div>
+    <div class="recap-list" id="recap-list"></div>
+    <div class="recap-btnrow">
+      <button class="btn btn-outline" id="btn-restart">Ulangi Lomba</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =======================================================================
+   KONFIGURASI SERVER (GOOGLE APPS SCRIPT)
+   Ganti nilai di bawah ini dengan URL Web App hasil deploy Google Apps
+   Script Anda (lihat file Code.gs & panduan deployment yang menyertai
+   file ini). Contoh: 'https://script.google.com/macros/s/AKfycb.../exec'
+   ======================================================================= */
+const CONFIG = {
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxJsGV5HDI3rrYEgJwP0sDIo51hLZRn_oj0txAxxzQL4RGNr2JFZ0dqk2jcX2Y13_0A3w/exec'
+};
+
+const QUESTIONS = [
+  {topic:"Eksponen", points:3, q:"Sederhanakan: 2<sup>3</sup> &times; 2<sup>4</sup> = ...", key:"128", accept:["128"], exp:"2<sup>3</sup> &times; 2<sup>4</sup> = 2<sup>(3+4)</sup> = 2<sup>7</sup> = 128"},
+  {topic:"Eksponen", points:3, q:"Tentukan nilai dari 5<sup>0</sup> + 3<sup>2</sup>.", key:"10", accept:["10"], exp:"5<sup>0</sup> = 1, 3<sup>2</sup> = 9, sehingga 1 + 9 = 10"},
+  {topic:"Eksponen", points:5, q:"Tentukan nilai dari (3<sup>-2</sup> &times; 3<sup>5</sup>) : 3<sup>1</sup>.", key:"9", accept:["9"], exp:"Pangkat dijumlah/dikurang: (-2+5) - 1 = 2, sehingga 3<sup>2</sup> = 9"},
+  {topic:"Eksponen", points:7, q:"Jika 4<sup>(x+1)</sup> = 64, tentukan nilai x.", key:"x = 2", accept:["2","x=2"], exp:"64 = 4<sup>3</sup>, maka 4<sup>(x+1)</sup> = 4<sup>3</sup> sehingga x + 1 = 3, jadi x = 2"},
+
+  {topic:"Statistika Dasar", points:3, q:"Data: 4, 6, 8, 10, 12. Tentukan rata-rata (mean) data tersebut.", key:"8", accept:["8"], exp:"(4+6+8+10+12) : 5 = 40 : 5 = 8"},
+  {topic:"Statistika Dasar", points:3, q:"Data: 3, 5, 7, 9, 11. Tentukan median data tersebut.", key:"7", accept:["7"], exp:"Data sudah terurut, nilai tengah dari 5 data adalah data ke-3, yaitu 7"},
+  {topic:"Statistika Dasar", points:5, q:"Data: 5, 7, 7, 8, 9, 9, 9, 10. Tentukan modus data tersebut.", key:"9", accept:["9"], exp:"Angka 9 muncul paling banyak (3 kali) dibanding angka lain"},
+  {topic:"Statistika Dasar", points:7, q:"Rata-rata dari 5 bilangan adalah 8. Jika ditambahkan bilangan ke-6 yaitu 20, tentukan rata-rata baru dari 6 bilangan tersebut.", key:"10", accept:["10"], exp:"Jumlah 5 bilangan = 5 &times; 8 = 40. Jumlah 6 bilangan = 40 + 20 = 60. Rata-rata baru = 60 : 6 = 10"},
+
+  {topic:"Bangun Ruang", points:3, q:"Tentukan volume kubus dengan panjang rusuk 5 cm.", key:"125 cm<sup>3</sup>", accept:["125","125cm3","125cm³"], exp:"V = s<sup>3</sup> = 5<sup>3</sup> = 125 cm<sup>3</sup>"},
+  {topic:"Bangun Ruang", points:3, q:"Tentukan luas permukaan kubus dengan panjang rusuk 4 cm.", key:"96 cm<sup>2</sup>", accept:["96","96cm2","96cm²"], exp:"LP = 6 &times; s<sup>2</sup> = 6 &times; 16 = 96 cm<sup>2</sup>"},
+  {topic:"Bangun Ruang", points:5, q:"Tentukan luas permukaan balok dengan panjang 6 cm, lebar 4 cm, dan tinggi 3 cm.", key:"108 cm<sup>2</sup>", accept:["108","108cm2","108cm²"], exp:"LP = 2(pl + pt + lt) = 2(24+18+12) = 2 &times; 54 = 108 cm<sup>2</sup>"},
+  {topic:"Bangun Ruang", points:7, q:"Tentukan volume tabung dengan jari-jari alas 7 cm dan tinggi 10 cm (&pi; = 22/7).", key:"1540 cm<sup>3</sup>", accept:["1540","1540cm3","1540cm³"], exp:"V = &pi;r<sup>2</sup>t = 22/7 &times; 49 &times; 10 = 22 &times; 7 &times; 10 = 1540 cm<sup>3</sup>"},
+
+  {topic:"Dalil Pythagoras", points:3, q:"Segitiga siku-siku memiliki sisi tegak 3 cm dan 4 cm. Tentukan panjang hipotenusanya.", key:"5 cm", accept:["5","5cm"], exp:"c = &radic;(3<sup>2</sup> + 4<sup>2</sup>) = &radic;25 = 5 cm"},
+  {topic:"Dalil Pythagoras", points:3, q:"Segitiga siku-siku memiliki hipotenusa 10 cm dan salah satu sisi tegak 6 cm. Tentukan panjang sisi tegak lainnya.", key:"8 cm", accept:["8","8cm"], exp:"sisi = &radic;(10<sup>2</sup> - 6<sup>2</sup>) = &radic;(100-36) = &radic;64 = 8 cm"},
+  {topic:"Dalil Pythagoras", points:5, q:"Sebuah tangga bersandar pada dinding. Jarak kaki tangga ke dinding 6 m dan tinggi ujung atas tangga 8 m. Tentukan panjang tangga.", key:"10 m", accept:["10","10m"], exp:"panjang tangga = &radic;(6<sup>2</sup> + 8<sup>2</sup>) = &radic;(36+64) = &radic;100 = 10 m"},
+  {topic:"Dalil Pythagoras", points:7, q:"Segitiga ABC siku-siku di B dengan AB = 9 cm dan BC = 12 cm. Titik D adalah titik tengah AC. Tentukan panjang BD.", key:"7,5 cm", accept:["7,5","7.5","7,5cm","7.5cm"], exp:"AC = &radic;(9<sup>2</sup>+12<sup>2</sup>) = &radic;(81+144) = &radic;225 = 15 cm. Garis dari titik siku-siku ke titik tengah hipotenusa sama dengan setengah hipotenusa, sehingga BD = 15 : 2 = 7,5 cm"},
+
+  {topic:"Peluang", points:3, q:"Sebuah dadu dilempar satu kali. Tentukan peluang munculnya mata dadu genap.", key:"1/2", accept:["1/2","0.5","0,5"], exp:"Mata dadu genap ada 3 (2,4,6) dari 6 kemungkinan, P = 3/6 = 1/2"},
+  {topic:"Peluang", points:3, q:"Dalam sebuah kotak terdapat 4 bola merah dan 6 bola putih. Diambil satu bola secara acak. Tentukan peluang terambil bola merah.", key:"2/5", accept:["2/5","0.4","0,4"], exp:"P = 4/10 = 2/5"},
+  {topic:"Peluang", points:5, q:"Dua buah dadu dilempar bersamaan. Tentukan peluang munculnya jumlah kedua mata dadu sama dengan 8.", key:"5/36", accept:["5/36"], exp:"Pasangan berjumlah 8: (2,6),(3,5),(4,4),(5,3),(6,2) &rarr; 5 kejadian dari 36 kemungkinan, P = 5/36"},
+  {topic:"Peluang", points:7, q:"Sebuah kantong berisi 5 kelereng merah dan 3 kelereng biru. Diambil 2 kelereng sekaligus secara acak. Tentukan peluang keduanya berwarna merah.", key:"5/14", accept:["5/14"], exp:"C(5,2)/C(8,2) = 10/28 = 5/14"},
+];
+
+const TOTAL_TIME = 20;
+let current = 0;
+let score = 0;
+let userAnswers = [];
+let timerInterval = null;
+let timeLeft = TOTAL_TIME;
+let locked = false;
+let playerName = '';
+
+const screens = {
+  start: document.getElementById('screen-start'),
+  question: document.getElementById('screen-question'),
+  explain: document.getElementById('screen-explain'),
+  recap: document.getElementById('screen-recap'),
+  teacher: document.getElementById('screen-teacher'),
+};
+
+function showScreen(name){
+  Object.values(screens).forEach(s => s.classList.remove('active'));
+  screens[name].classList.add('active');
+}
+
+function normalize(str){
+  return str.toString().trim().toLowerCase()
+    .replace(/\s+/g,'')
+    .replace(/cm\^?3|cm3/g,'cm³')
+    .replace(/cm\^?2|cm2/g,'cm²')
+    .replace(/,/g,'.');
+}
+
+function isCorrect(q, userInput){
+  const u = normalize(userInput);
+  return q.accept.some(a => normalize(a) === u);
+}
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  const nameInput = document.getElementById('player-name');
+  const name = nameInput.value.trim();
+  if(name === ''){
+    nameInput.style.borderColor = 'var(--maroon)';
+    nameInput.placeholder = 'Nama wajib diisi!';
+    nameInput.focus();
+    return;
+  }
+  playerName = name;
+  document.getElementById('player-name-tag').textContent = 'Peserta: ' + playerName;
+  current = 0; score = 0; userAnswers = [];
+  loadQuestion();
+  showScreen('question');
+});
+
+document.getElementById('player-name').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') document.getElementById('btn-start').click();
+});
+
+function loadQuestion(){
+  locked = false;
+  const q = QUESTIONS[current];
+  document.getElementById('qnum-label').textContent = `Soal ${current+1} dari ${QUESTIONS.length}`;
+  document.getElementById('qtopic-label').textContent = q.topic;
+  document.getElementById('points-tag').textContent = `${q.points} POIN`;
+  document.getElementById('question-text').innerHTML = q.q;
+  const input = document.getElementById('answer-input');
+  input.value = '';
+  input.disabled = false;
+  setTimeout(() => input.focus(), 200);
+
+  timeLeft = TOTAL_TIME;
+  updateTimerUI();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      submitAnswer(true);
+    }
+  }, 1000);
+}
+
+function updateTimerUI(){
+  const fill = document.getElementById('timer-fill');
+  const num = document.getElementById('timer-num');
+  const pct = Math.max(0,(timeLeft/TOTAL_TIME)*100);
+  fill.style.width = pct + '%';
+  num.textContent = timeLeft;
+  if(timeLeft <= 5){
+    fill.style.background = 'var(--maroon)';
+  } else if(timeLeft <= 10){
+    fill.style.background = '#c9962f';
+  } else {
+    fill.style.background = 'var(--hijau)';
+  }
+}
+
+document.getElementById('btn-submit').addEventListener('click', () => submitAnswer(false));
+document.getElementById('answer-input').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') submitAnswer(false);
+});
+
+function submitAnswer(timedOut){
+  if(locked) return;
+  locked = true;
+  clearInterval(timerInterval);
+  const q = QUESTIONS[current];
+  const input = document.getElementById('answer-input');
+  input.disabled = true;
+  const userVal = timedOut ? '' : input.value;
+  const correct = userVal.trim() !== '' && isCorrect(q, userVal);
+  if(correct) score += q.points;
+  userAnswers.push({ question:q.q, topic:q.topic, points:q.points, userVal: userVal.trim() || '(tidak dijawab)', correct });
+  showExplanation(q, userVal.trim(), correct);
+}
+
+function showExplanation(q, userVal, correct){
+  const flag = document.getElementById('result-flag');
+  flag.textContent = correct ? 'BENAR' : 'SALAH';
+  flag.className = 'result-flag ' + (correct ? 'flag-benar' : 'flag-salah');
+  document.getElementById('ex-question').innerHTML = q.q;
+  const userEl = document.getElementById('ex-user');
+  userEl.textContent = userVal || '(tidak dijawab)';
+  userEl.className = 'val' + (correct ? '' : ' user-wrong');
+  document.getElementById('ex-key').innerHTML = q.key;
+  document.getElementById('ex-explain').innerHTML = q.exp;
+  showScreen('explain');
+}
+
+document.getElementById('btn-next').addEventListener('click', () => {
+  current++;
+  if(current < QUESTIONS.length){
+    loadQuestion();
+    showScreen('question');
+  } else {
+    showRecap();
+  }
+});
+
+function showRecap(){
+  document.getElementById('recap-name').textContent = 'Hasil Lomba: ' + playerName;
+  document.getElementById('recap-score').textContent = score;
+  const benar = userAnswers.filter(a => a.correct).length;
+  const salah = userAnswers.length - benar;
+  document.getElementById('recap-benar').textContent = benar;
+  document.getElementById('recap-salah').textContent = salah;
+
+  const list = document.getElementById('recap-list');
+  list.innerHTML = '';
+  userAnswers.forEach((a, i) => {
+    const item = document.createElement('div');
+    item.className = 'recap-item';
+    item.innerHTML = `
+      <div class="recap-icon ${a.correct ? 'ok' : 'no'}">${a.correct ? '✓' : '✕'}</div>
+      <div class="rtext">Soal ${i+1} · ${a.topic}</div>
+      <div class="rpts">${a.correct ? '+'+a.points : '0'} poin</div>
+    `;
+    list.appendChild(item);
+  });
+  showScreen('recap');
+  sendResultToServer(benar, salah);
+}
+
+function isScriptConfigured(){
+  return CONFIG.SCRIPT_URL && !CONFIG.SCRIPT_URL.includes('GANTI_DENGAN');
+}
+
+async function sendResultToServer(benar, salah){
+  const statusEl = document.getElementById('recap-sync-status');
+  if(!isScriptConfigured()){
+    statusEl.textContent = 'Hasil tersimpan di perangkat ini saja (server belum diatur).';
+    return;
+  }
+  statusEl.textContent = 'Mengirim hasil ke guru...';
+  const payload = {
+    nama: playerName,
+    skor: score,
+    benar: benar,
+    salah: salah,
+    waktu: new Date().toISOString(),
+    detail: userAnswers.map(a => ({ topik:a.topic, poin:a.points, benar:a.correct, jawaban:a.userVal }))
+  };
+  try{
+    await fetch(CONFIG.SCRIPT_URL, {
+      method:'POST',
+      mode:'no-cors',
+      headers: { 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    statusEl.textContent = '✓ Hasil terkirim ke guru (bisa dilihat dari perangkat lain).';
+  }catch(err){
+    statusEl.textContent = 'Gagal mengirim hasil. Cek koneksi internet.';
+  }
+}
+
+document.getElementById('btn-teacher-view').addEventListener('click', () => {
+  showScreen('teacher');
+  loadTeacherResults();
+});
+document.getElementById('btn-teacher-back').addEventListener('click', () => showScreen('start'));
+document.getElementById('btn-teacher-refresh').addEventListener('click', loadTeacherResults);
+
+async function loadTeacherResults(){
+  const statusEl = document.getElementById('teacher-status');
+  const listEl = document.getElementById('teacher-list');
+  listEl.innerHTML = '';
+  if(!isScriptConfigured()){
+    statusEl.textContent = 'URL Google Apps Script belum diatur. Lihat panduan deployment untuk menghubungkan server.';
+    return;
+  }
+  statusEl.textContent = 'Memuat data...';
+  try{
+    const res = await fetch(CONFIG.SCRIPT_URL + '?action=list');
+    const data = await res.json();
+    data.sort((a,b) => (b.skor||0) - (a.skor||0));
+    statusEl.textContent = data.length + ' peserta telah mengerjakan lomba ini.';
+    data.forEach((d, i) => {
+      const item = document.createElement('div');
+      item.className = 'recap-item';
+
+      const icon = document.createElement('div');
+      icon.className = 'recap-icon ok';
+      icon.style.background = 'var(--biru-tua)';
+      icon.textContent = i+1;
+
+      const text = document.createElement('div');
+      text.className = 'rtext';
+      text.textContent = `${d.nama} — ${d.benar} benar, ${d.salah} salah`;
+
+      const pts = document.createElement('div');
+      pts.className = 'rpts';
+      pts.textContent = (d.skor||0) + ' poin';
+
+      item.appendChild(icon);
+      item.appendChild(text);
+      item.appendChild(pts);
+      listEl.appendChild(item);
+    });
+  }catch(err){
+    statusEl.textContent = 'Gagal memuat data. Pastikan URL Apps Script benar dan koneksi internet aktif.';
+  }
+}
+
+document.getElementById('btn-restart').addEventListener('click', () => {
+  const nameInput = document.getElementById('player-name');
+  nameInput.value = '';
+  nameInput.style.borderColor = '';
+  nameInput.placeholder = 'Tuliskan namamu di sini...';
+  showScreen('start');
+});
+</script>
+</body>
+</html>
